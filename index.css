@@ -5,3 +5,7 @@
 @keyframes rotate{
     100%{ transform:rotate(1turn) }
 }
+
+body{
+    font-family: 'Calibri, Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+}
