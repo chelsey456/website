@@ -7,4 +7,9 @@ function Clicked() {
     // 1 + 1
     // Click + 1
     console.log(Click) 
+        const a = 21;
+        const b = 1.65;
+        const c = a + b;
+        const d = a / c;
+        const e = d + a;
 }
