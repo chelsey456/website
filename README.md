@@ -1,5 +1,5 @@
 # My Websites
-these websites are my favourite planes.
+websites about my favourite planes.
 - SU57
 ## The Su-57 is a Russian, single-seat, twin-engine, stealth multirole fighter aircraft, known by the NATO reporting name "Felon". It is designed for both aerial combat and ground/maritime strike missions, and it incorporates features like super maneuverability, supercruise, and integrated avionics. Developed by Sukhoi, it is intended to be the basis for a new family of stealth combat aircraft for the Russian Air Force. 
 - CL 1201
