@@ -1,11 +1,9 @@
-.rotate { 
-    animation:2s rotate infinite linear; 
+body {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
 }
 
-@keyframes rotate{
-    100%{ transform:rotate(1turn) }
-}
-
-body{
-    font-family: 'Calibri, Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+#board {
+   /* background-color: skyblue ; */ 
+   background-image: url(https://i.pinimg.com/564x/b2/b0/84/b2b084ad6061dfe2122302266ea8af58.jpg);
 }
