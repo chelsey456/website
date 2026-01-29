@@ -3,7 +3,7 @@ body {
     text-align: center;
 }
 
-body {
+#board {
    /* background-color: skyblue ; */ 
    background-image: url(https://i.pinimg.com/564x/b2/b0/84/b2b084ad6061dfe2122302266ea8af58.jpg);
 }
