@@ -86,20 +86,32 @@ function update() {
 		pipe.x += velocityX;
 		context.drawImage(pipe.img, pipe.x, pipe.y, pipe.width, pipe.height);
 
-if (!pipeArray.passed && bird.x > pipe.x + pipe.width) {
-	score += 1;
-	pipe.passed = true;
-}
+		if (!pipe.passed && bird.x > pipe.x + pipe.width) {
+			score += 0.5;
+			pipe.passed = true;
+		}
 
 		if (detectCollision(bird, pipe)) {
 			gameOver = true;
 		}
 	}
 
+	//clear pipes
+	while (pipeArray.length > 0 && pipeArray[0].x + pipeWidth < 0) {
+		pipeArray.shift();
+
+	}
+
 	//score
 	context.fillstyle = "white";
-	context.font="45px sans-serif";
+	context.font = "45px sans-serif";
 	context.fillText(score, 5, 45);
+
+	if (gameOver) {
+		context.fillText("GAME OVER", 5, 90);
+		context.font = "25px sans-serif"
+		context.fillText("Press Space to Restart", 5, 130);
+	}
 }
 
 function placepipes() {
@@ -134,12 +146,20 @@ function placepipes() {
 function moveBird(e) {
 	if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyW") {
 		velocityY = -5;
+
+		//reset game
+		if (gameOver) {
+			bird.y = birdY;
+			pipeArray = [];
+			score = 0;
+			gameOver = false;
+		}
 	}
 }
 
 function detectCollision(a, b) {
 	return a.x < b.x + b.width &&
-	a.x + a.width > b.x &&
-	a.y < b.y + b.height &&
-	a.y + a.height > b.y;
+		a.x + a.width > b.x &&
+		a.y < b.y + b.height &&
+		a.y + a.height > b.y;
 }
