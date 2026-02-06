@@ -110,7 +110,7 @@ function update() {
 	if (gameOver) {
 		context.fillText("GAME OVER", 5, 90);
 		context.font = "25px sans-serif"
-		context.fillText("Press Space to Restart", 5, 130);
+		context.fillText("Press Space to Restart", 10, 120);
 	}
 }
 
@@ -144,7 +144,7 @@ function placepipes() {
 }
 
 function moveBird(e) {
-	if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyW") {
+	if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyW" || e.code == "KeyT" || e.code == "KeyI") {
 		velocityY = -5;
 
 		//reset game
