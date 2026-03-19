@@ -21,10 +21,14 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
 
-        self.surf = pygame.Surface((30, 30))
-        self.surf.fill((128, 255, 40))  # rgb
-        self.rect = self.surf.get_rect()
+        # self.surf = pygame.Surface((30, 30))
+        # self.surf.fill((128, 255, 40))  # rgb
+        # self.rect = self.surf.get_rect()
 
+        self.surf = pygame.image.load("Player.png")
+        self.surf = pygame.transform.smoothscale(self.surf, (50, 50))
+        self.rect = self.surf.get_rect()
+    
         self.pos = vec(10, 400)
         self.vel = vec(0, 0)
         self.accel = vec(0, 0)
@@ -49,8 +53,11 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.midbottom = self.pos
 
+    jumps = 0
     def jump(self):
-        self.vel.y = -15
+        if self.jumps < 2: # and or is
+            self.vel.y = -15 
+        self.jumps += 1
 
     def update(self):
         #                               sprite  sprites  delete
@@ -58,7 +65,26 @@ class Player(pygame.sprite.Sprite):
         if hits:
             self.pos.y = hits[0].rect.top + 1
             self.vel.y = 0
+            self.jumps = 0
 
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, position):
+        super().__init__()
+
+        self.surf = pygame.image.load("enemy.png")
+        self.surf = pygame.transform.smoothscale(self.surf, (50, 50))
+        position = (position[0], position[1]-40)
+        self.rect = self.surf.get_rect(center=position)
+        
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, position):
+        super().__init__()
+
+        # TODO: add bullet image
+        self.surf = pygame.image.load("bullet.png")
+        self.surf = pygame.transform.smoothscale(self.surf, (50, 50))
+        position = (position[0], position[1]-40)
+        self.rect = self.surf.get_rect(center=position)
 
 class Platform(pygame.sprite.Sprite):
     position = ()
@@ -66,6 +92,8 @@ class Platform(pygame.sprite.Sprite):
 
     def __init__(self, position, length):
         super().__init__()
+
+        position = (position[0], position[1]-10)
 
         self.position = position
         self.length = length
@@ -92,8 +120,15 @@ for pt in pts:
     platforms.add(pt)
     all_sprites.add(pt)
 
+enemies = [
+    Enemy((400, HEIGHT))
+]
+
 all_sprites.add(PT1)
 all_sprites.add(P1)
+for enemy in enemies:
+    all_sprites.add (enemy)
+
 
 while True:
     for event in pygame.event.get():
@@ -104,7 +139,7 @@ while True:
             if event.key == K_SPACE:  # challenge: can you make the up arrow jump too?
                 P1.jump()
 
-    display_surface.fill((0, 0, 0))
+    display_surface.fill((255, 255, 255))
 
     P1.move()
     P1.update()
