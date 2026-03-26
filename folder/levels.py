@@ -38,11 +38,19 @@ level3 = Level(
     start_position=(15, HEIGHT - 30),
     platforms=[
         Platform((0, HEIGHT)),
-        Platform((400, HEIGHT), 200),
-        Platform((350, HEIGHT), 200),
-        Platform((312, HEIGHT), 200),
+        Platform((350, HEIGHT), 50),
+        Platform((500, HEIGHT), 50),
     ],
-    end=End((WIDTH // 2 + 10, HEIGHT - 100)),
+    end=End((800, HEIGHT - 100)),
+)
+
+level4 = Level(
+    start_position=(15, HEIGHT - 30),
+    platforms=[
+        Platform((0, HEIGHT)),
+        Platform((350, HEIGHT), 50),
+    ],
+    end=End((800, HEIGHT - 100)),
 )
 
 levels = [x for x in list(vars().values()) if isinstance(x, Level)]
