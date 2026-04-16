@@ -1,7 +1,7 @@
 # change any of these
 import pygame
 
-DEBUG = True
+DEBUG = True 
 
 HEIGHT = 450
 WIDTH = 800

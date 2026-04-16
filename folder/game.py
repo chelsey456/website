@@ -23,7 +23,7 @@ pygame.init()
 frames_per_second = pygame.time.Clock()
 
 display = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Game")  # you can change this
+pygame.display.set_caption("Game") 
 
 level_num = 0
 LEVEL = pygame.sprite.Group(levels[level_num].sprites)
