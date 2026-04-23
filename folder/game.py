@@ -1,6 +1,7 @@
 import sys
 import pygame
 from pygame.constants import (
+    K_a,
     K_c,
     K_x,
     K_z,
@@ -14,7 +15,8 @@ from pygame.constants import (
 from pygame.math import Vector2 as vec
 
 from levels import levels
-from objects import End, Platform
+from objects import Platform
+from objects import Bullet, End, Enemy
 from consts import DEBUG, WIDTH, HEIGHT, ACCEL, FRICTION, FPS
 from util import debug, transform
 
@@ -23,7 +25,7 @@ pygame.init()
 frames_per_second = pygame.time.Clock()
 
 display = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Game") 
+pygame.display.set_caption("Game")  # you can change this
 
 level_num = 0
 LEVEL = pygame.sprite.Group(levels[level_num].sprites)
@@ -32,14 +34,15 @@ LEVEL = pygame.sprite.Group(levels[level_num].sprites)
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        
-        self.surf = pygame.image.load("Player.png")
-        self.surf = pygame.transform.smoothscale(self.surf, (50, 50))
+        self.surf = pygame.Surface((30, 30))
+        self.surf.fill((128, 255, 40))  # rgb
         self.rect = self.surf.get_rect()
 
         self.pos = vec(15, HEIGHT - 50)
         self.vel = vec(0, 0)
         self.accel = vec(0, 0)
+
+        self.score = 0
 
     def move(self):
         self.accel = vec(0, 0.5)
@@ -59,17 +62,23 @@ class Player(pygame.sprite.Sprite):
 
     jumps = 0
     def jump(self):
-        if self.jumps < 2: # and or is
-            self.vel.y = -15 
-        self.jumps += 1
+        if self.jumps <= 1:
+            self.jumps += 1
+            self.vel.y = -15
 
-    # FIXME: dont teleport the player if they collide with the side of a platform
     def update(self):
         #                                sprite  sprites  delete?
         hits = pygame.sprite.spritecollide(PLAYER, LEVEL, False)  # type: ignore
         for hit in hits:
             if isinstance(hit, Platform):
-                if self.pos.y > hits[0].rect.bottom:
+                self.jumps = 0
+                if self.pos.x < hit.rect.left:
+                    self.pos.x = hit.rect.left - self.surf.get_width() / 2
+                    self.vel.x = 0
+                elif self.pos.x > hit.rect.right:
+                    self.pos.x = hit.rect.right + self.surf.get_width() / 2
+                    self.vel.x = 0
+                elif self.pos.y > hits[0].rect.bottom:
                     self.pos.y = (
                         hits[0].rect.bottom
                         + hits[0].surf.get_height()
@@ -80,7 +89,6 @@ class Player(pygame.sprite.Sprite):
                 else:
                     self.pos.y = hits[0].rect.top + 1
                     self.vel.y = 0
-                self.jumps = 0
             elif isinstance(hit, End):
                 global level_num
                 level_num += 1
@@ -103,6 +111,8 @@ class Player(pygame.sprite.Sprite):
 
 
 PLAYER = Player()
+
+BULLETS = []
 
 ALL_SPRITES = pygame.sprite.Group()
 ALL_SPRITES.add(PLAYER)
@@ -144,18 +154,34 @@ while True:
             elif event.mod & KMOD_CTRL and event.key == K_c:
                 pygame.quit()
                 sys.exit()
+            elif event.key == K_a:
+                bullet = Bullet((PLAYER.pos.x + PLAYER.surf.get_width() / 2, PLAYER.pos.y - PLAYER.surf.get_height()), vec(5, 0))
+                BULLETS.append(bullet)
+                ALL_SPRITES.add(bullet)
             elif DEBUG:
                 if event.key == K_z:
                     show_entity_info = not show_entity_info
                 elif event.key == K_x:
                     show_grid_lines = not show_grid_lines
 
-    display.fill((255, 255, 255))
+    display.fill((0, 0, 0))
 
     PLAYER.move()
     PLAYER.update()
 
     CAMERA += (PLAYER.pos.x - CAMERA - WIDTH // 2) * 0.05
+
+    for bullet in BULLETS:
+        bullet.update()
+        collided = pygame.sprite.spritecollideany(bullet, LEVEL)
+        if collided or bullet.pos.x - abs(CAMERA) > WIDTH or bullet.pos.x - CAMERA < 0:
+            if isinstance(collided, End):
+                continue
+            if isinstance(collided, Enemy):
+                PLAYER.score += 1
+                collided.kill()
+            bullet.kill()
+            BULLETS.remove(bullet)
 
     for entity in ALL_SPRITES:
         display.blit(entity.surf, transform(entity.rect, CAMERA))

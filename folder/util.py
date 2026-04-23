@@ -4,7 +4,7 @@ from pygame.surface import Surface
 from pygame.math import Vector2 as vec
 
 from consts import FONT, WIDTH, HEIGHT
-from objects import End, Platform
+from objects import Coin, Platform, Bullet, End, Enemy
 
 
 def text(text: str, font: Font = FONT) -> Surface:
@@ -23,6 +23,12 @@ def fmt_obj(obj) -> str:
         return f"l:{obj.length} w:{obj.width}"
     elif isinstance(obj, End):
         return f"s:{obj.size}"
+    elif isinstance(obj, Coin):
+        return "Coin"
+    elif isinstance(obj, Enemy):
+        return "Enemy"
+    elif isinstance(obj, Bullet):
+        return "Bullet"
     else:
         return "Unknown object!"
 
@@ -63,7 +69,10 @@ def debug(
             pygame.draw.line(display, (0, 20, 170), (0, y), (WIDTH, y))
 
     if world_info:
-        display.blit(text(world_info), (WIDTH - text(world_info).get_width() - 10, 10))
+        world_text = text(world_info)
+        display.blit(world_text, (WIDTH - world_text.get_width() - 10, 10))
+        sprites = text(f"{len(all_sprites)} entities")
+        display.blit(sprites, (WIDTH - sprites.get_width() - 10, 30))
 
     if scrolling:
         p_pos = text(f"pos: ({player.pos.x:.2f}, {player.pos.y:.2f}) scr({transform(player.pos.x, cam):.2f})")
@@ -85,6 +94,9 @@ def debug(
         else:
             collision_text = text(f"on: {', '.join([f'{c.pos}, {fmt_obj(c)}' for c in collisions])}")
         display.blit(collision_text, (10, 70 if scrolling else 50))
+    
+    score_text = text(f"score: {player.score}")
+    display.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, 10))
 
     cursor_pos = vec(pygame.mouse.get_pos())
     if scrolling:
