@@ -57,7 +57,7 @@ class Bullet(pygame.sprite.Sprite):
 
         # TODO: add bullet image
         self.surf = pygame.image.load("bullet.png")
-        self.surf = pygame.transform.smoothscale(self.surf, (50, 50))
+        self.surf = pygame.transform.smoothscale(self.surf, (50, 15))
         self.pos = vec(pos)
         self.rect = self.surf.get_rect(center=pos)
 
