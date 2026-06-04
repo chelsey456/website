@@ -65,8 +65,27 @@ class Bullet(pygame.sprite.Sprite):
         self.pos += self.vel
         self.rect.topleft = self.pos
 
-        
-# class Enemy(pygame.sprite.Sprite):
+class Plane(pygame.sprite.Sprite):
+    def __init__(self, pos, vel):
+        super().__init__()
+
+        self.vel = vec(vel)
+        self.fuel = 100
+        self.weight = 100
+        self.surf = pygame.image.load("bullet.png")
+        self.surf = pygame.transform.smoothscale(self.surf, (50, 15))
+        self.pos = vec(pos)
+        self.rect = self.surf.get_rect(center=pos)
+
+    def update(self):
+        self.fuel -= 10
+        self.weight -= 5
+        self.pos += self.vel / self.weight
+        self.rect.topleft = self.pos
+
+
+# class Enem
+# y(pygame.sprite.Sprite):
 #     def __init__(self, pos: tuple[float, float], size=30):
 #         super().__init__()
 #         self.size = size

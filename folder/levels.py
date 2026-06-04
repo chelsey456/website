@@ -1,7 +1,7 @@
 from pygame import Vector2 as vec
 
 from consts import HEIGHT, WIDTH
-from objects import End, Enemy, Platform
+from objects import End, Enemy, Platform, Plane
 
 
 class Level:
@@ -11,7 +11,7 @@ class Level:
         self.end = end
         self.enemies = enemies
 
-        self.sprites = platforms + [end] + enemies
+        self.sprites = platforms + [end] + enemies + [Plane((100, HEIGHT//2), 200)]
 
 level1 = Level(
     start_position=(15, HEIGHT - 30),
